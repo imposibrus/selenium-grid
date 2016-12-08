@@ -15,7 +15,7 @@ ENV JAVA_HOME /usr/lib/jvm/java-7-oracle
 
 # Install latest android tools and system images
 RUN ( sleep 4 && while [ 1 ]; do sleep 1; echo y; done ) | android update sdk --no-ui --force -a --filter \
-    platform-tool,android-22,build-tools-22.0.1,,sys-img-x86-android-22,,sys-img-armeabi-v7a-android-22 && \
+    platform-tool,android-22,build-tools-22.0.1,sys-img-armeabi-v7a-android-22 && \
 echo "y" | android update adb
 
 # Create fake keymap file
@@ -24,12 +24,16 @@ touch /usr/local/android-sdk/tools/keymaps/en-us
 
 
 ENV USER root
-ENV DISPLAY :0
+ENV DISPLAY :1
+ENV TERM xterm
 
 COPY password.txt .
 RUN cat password.txt password.txt | vncpasswd && rm password.txt
 
 EXPOSE 5901
+EXPOSE 5554
+EXPOSE 5555
+EXPOSE 22
 
 COPY vnc.sh /opt/
 
